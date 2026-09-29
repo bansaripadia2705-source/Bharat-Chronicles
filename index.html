@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Heritage Adventure</title>
+<style>
+:root{
+  --navy:#10253f; --navy2:#183b5f; --gold:#d6a84f; --saffron:#e88732;
+  --terra:#a95135; --sand:#ead7b1; --ivory:#fff8e9; --green:#55735b;
+  --ink:#30271e; --muted:#786c5d; --success:#47785b; --danger:#a8493c;
+  --shadow:0 18px 45px rgba(29,22,14,.18); --radius:22px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,"Times New Roman",serif;color:var(--ink);background:
+radial-gradient(circle at 20% 0%,rgba(214,168,79,.18),transparent 28%),
+linear-gradient(135deg,#efe0c1,#d9c29a 55%,#eee0c4);min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh}
+.screen{display:none;min-height:100vh}.screen.active{display:block}
+.splash{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;background:
+radial-gradient(circle,#294d6e 0,#132b47 45%,#071728 100%);color:#fff8e9}
+.splash:before{content:"";position:absolute;inset:5%;border:1px solid rgba(214,168,79,.35);border-radius:30px;box-shadow:inset 0 0 80px rgba(214,168,79,.08)}
+.splash .content{position:relative;z-index:1;max-width:760px;padding:40px}
+.emblem{font-size:64px;filter:drop-shadow(0 8px 12px #0008);animation:float 3s ease-in-out infinite}
+.splash h1{font-size:clamp(48px,8vw,92px);margin:8px 0;color:#f2c86b;letter-spacing:5px}
+.splash h2{letter-spacing:5px;font-size:16px;font-family:Arial,sans-serif}.splash p{font-size:22px;font-style:italic;color:#ead7b1}
+.btn{border:0;border-radius:14px;padding:13px 20px;background:var(--navy);color:white;box-shadow:0 8px 18px #10253f33;transition:.2s;min-height:46px}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px #10253f44}
+.btn.gold{background:linear-gradient(135deg,#d6a84f,#a97624);color:#fff}
+.btn.light{background:#fff8e9;color:var(--navy);border:1px solid #cdb88f}
+.btn.danger{background:var(--danger)} .btn.success{background:var(--success)}
+.small{font-size:13px}.muted{color:var(--muted)}
+.auth{display:grid;place-items:center;padding:35px;background:linear-gradient(135deg,#183b5f,#10253f)}
+.auth-card{width:min(680px,94vw);background:rgba(255,248,233,.97);border:2px solid #c9a95d;border-radius:28px;padding:32px;box-shadow:var(--shadow)}
+.auth-card h1{text-align:center;color:var(--navy);margin-top:0}.pass{display:flex;gap:10px;align-items:center;justify-content:center;color:#8c6728;font-size:13px;margin-bottom:20px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{font:600 12px Arial,sans-serif;text-transform:uppercase;letter-spacing:.8px}.field input,.field select{padding:12px;border-radius:11px;border:1px solid #cdbd9d;background:#fffdf7;outline:none}.field input:focus,.field select:focus{border-color:#a97624;box-shadow:0 0 0 3px #d6a84f22}
+.avatars{display:flex;gap:9px;flex-wrap:wrap}.avatar-choice{border:1px solid #d2c2a4;background:#fff8e9;border-radius:12px;padding:10px 12px}.avatar-choice.selected{border:2px solid var(--gold);background:#f5e5c4}
+.app-shell{min-height:100vh}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 20px;background:rgba(16,37,63,.97);color:#fff;border-bottom:2px solid #d6a84f}
+.brand{display:flex;align-items:center;gap:10px;font-weight:bold;letter-spacing:1px;white-space:nowrap}.brand span{font-size:27px}.nav{display:flex;gap:4px;flex:1;justify-content:center}.nav button{background:transparent;color:#e9dec7;border:0;padding:10px 11px;border-radius:10px}.nav button:hover,.nav button.active{background:#ffffff16;color:#f2c86b}.stats{display:flex;gap:8px;align-items:center}.pill{background:#ffffff14;border:1px solid #ffffff22;padding:8px 10px;border-radius:20px;font:600 12px Arial,sans-serif}.hamb{display:none;background:none;color:white;border:0;font-size:25px}
+.page{padding:30px;max-width:1320px;margin:auto}.hero{background:linear-gradient(135deg,#17395cdd,#294f6bdd),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cpath d='M0 45Q22 20 45 45T90 45M45 0Q20 22 45 45T45 90' fill='none' stroke='%23d6a84f' stroke-opacity='.08'/%3E%3C/svg%3E");color:white;border-radius:28px;padding:34px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero h1{font-size:clamp(30px,4vw,52px);margin:0 0 8px;color:#f2c86b}.hero p{max-width:750px;font-size:18px;line-height:1.6;color:#eee4d1}.hero .stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.card{background:rgba(255,248,233,.94);border:1px solid #cbb98f;border-radius:var(--radius);padding:22px;box-shadow:0 10px 28px rgba(51,35,16,.09)}.action{min-height:205px;position:relative;overflow:hidden;transition:.2s}.action:hover{transform:translateY(-4px);box-shadow:var(--shadow)}.action .icon{font-size:45px}.action h3{margin:12px 0 7px;color:var(--navy)}.action p{color:var(--muted);line-height:1.5}.section-title{display:flex;justify-content:space-between;align-items:center;margin:30px 0 14px}.section-title h2{margin:0;color:var(--navy)}
+.journey{display:flex;align-items:center;gap:8px;overflow:auto;padding:15px 2px}.journey-line{height:4px;background:#c4ad7b;min-width:25px}.level-card{min-width:190px}.level-card.locked{opacity:.55}.level-card.complete{border-color:#a88435;background:#fff4d4}.level-icon{font-size:36px}.tag{display:inline-block;padding:5px 9px;border-radius:15px;background:#e9dcc0;font:700 11px Arial,sans-serif;color:#654d28}.locked-badge{float:right}.notice{padding:14px 16px;border-radius:13px;background:#f6ead1;border-left:4px solid var(--gold);margin:14px 0}.progress{height:10px;background:#d9c9a7;border-radius:20px;overflow:hidden}.progress>span{display:block;height:100%;background:linear-gradient(90deg,#b47c24,#e8bf5a);width:0;transition:width .5s}
+.map{display:grid;grid-template-columns:1.25fr 1fr;gap:20px}.india-map{min-height:540px;border-radius:25px;background:linear-gradient(145deg,#163a5b,#284e65);position:relative;overflow:hidden;padding:22px;color:#fff}.india-map:before{content:"INDIA";position:absolute;inset:0;display:grid;place-items:center;font-size:120px;font-weight:bold;color:#ffffff09;letter-spacing:15px}.states-grid{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:30px}.state-btn{border:1px solid #ffffff2a;background:#ffffff;color:#111;border-radius:10px;padding:10px 5px;min-height:54px}.state-btn:hover,.state-btn.selected{background:#d6a84f;color:#132b47}.info{background:#fff8e9;border-radius:25px;padding:26px;border:1px solid #cdb98e}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}.tab{border:0;background:#eadfc9;padding:9px 12px;border-radius:10px;color:#473b2d}.tab.active{background:#183b5f;color:white}
+.game{background:linear-gradient(135deg,#112f4d,#244e64);color:#fff;border-radius:28px;padding:25px;min-height:620px;box-shadow:var(--shadow);position:relative;overflow:hidden}.game:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,#d6a84f2a,transparent 25%),linear-gradient(120deg,transparent,#ffffff05);pointer-events:none}.game-inner{position:relative;z-index:1}.game h1{color:#f2c86b}.game-top{display:flex;justify-content:space-between;gap:15px;align-items:center}.game-stage{margin:25px auto;max-width:900px}.clue{background:#fff7df;color:#30271e;border:2px solid #d2ae62;border-radius:20px;padding:24px;box-shadow:0 15px 30px #0003}.clue .big{font-size:48px}.answers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:15px}.answer{background:#fff8e9;border:2px solid #c9b78f;border-radius:15px;padding:18px;color:#30271e;min-height:70px}.answer:hover{border-color:#d6a84f}.answer.correct{border-color:#4f865f;background:#e4f2e6}.answer.wrong{border-color:#b95a4e;background:#f7dfdb}.planks{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:end;min-height:240px;padding:20px;background:linear-gradient(#32627b,#173b53);border-radius:20px}.plank{height:75px;border:0;border-radius:10px;background:linear-gradient(#9a6637,#714326);color:#fff;padding:15px;font-weight:bold;box-shadow:0 8px 0 #4c2c19}.plank:hover{transform:translateY(-4px)}.plank.break{animation:break .5s forwards}.hop-grid{display:grid;grid-template-columns:repeat(3,100px);gap:8px;justify-content:center;margin:20px auto}.tile{height:80px;background:#caa86a;color:#2e251b;border-radius:12px;display:grid;place-items:center;font-weight:bold;border:3px solid #87683b}.tile.player{box-shadow:0 0 0 5px #d6a84f55;animation:hop .5s}.tile.question{background:#f2c86b}
+.festival-img{height:250px;border-radius:20px;display:grid;place-items:center;font-size:90px;background:linear-gradient(135deg,#8b4c32,#d39b46);margin-bottom:15px}
+.chamber{background:radial-gradient(circle at center,#5c4564,#211b37 60%,#0e1120);border-radius:28px;padding:30px;color:white;min-height:570px;text-align:center}.dress-preview{height:280px;border-radius:22px;background:linear-gradient(145deg,#31546d,#b47749);display:grid;place-items:center;font-size:100px;max-width:600px;margin:20px auto}.upload{border:2px dashed #d6a84f;border-radius:18px;padding:25px;max-width:600px;margin:auto}
+.rewards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.metric{font-size:35px;color:#9a6b20}.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.badge{display:flex;align-items:center;gap:12px}.badge .medal{font-size:38px}
+.toast{position:fixed;right:20px;bottom:20px;background:#10253f;color:#fff;padding:15px 18px;border-radius:13px;box-shadow:var(--shadow);transform:translateY(120px);transition:.3s;z-index:99}.toast.show{transform:translateY(0)}
+.modal{position:fixed;inset:0;background:#061321aa;display:none;align-items:center;justify-content:center;z-index:80;padding:20px}.modal.open{display:flex}.modal-box{background:#fff8e9;border-radius:24px;padding:28px;max-width:650px;width:100%;max-height:90vh;overflow:auto}
+footer{text-align:center;padding:30px;color:#705e45}
+@keyframes float{50%{transform:translateY(-8px)}}@keyframes hop{50%{transform:translateY(-18px)}}@keyframes break{50%{transform:rotate(4deg) translateY(10px)}100%{opacity:.15;transform:translateY(90px) rotate(12deg)}}@media(max-width:950px){.grid4{grid-template-columns:repeat(2,1fr)}.map{grid-template-columns:1fr}.rewards{grid-template-columns:1fr 1fr}.nav{display:none}.hamb{display:block}.topbar{flex-wrap:wrap}.nav.open{display:flex;order:4;width:100%;justify-content:space-around}.stats{margin-left:auto}}@media(max-width:650px){.page{padding:18px}.grid4,.grid3,.grid2,.rewards,.badges{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.answers{grid-template-columns:1fr}.states-grid{grid-template-columns:repeat(2,1fr)}.game{padding:17px}.hero{padding:24px}.journey{align-items:stretch}.level-card{min-width:160px}}
+
+/* Level 5 browser-side heritage try-on */
+.tryon-shell{display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1.1fr);gap:22px;align-items:start}
+.tryon-stage{position:relative;background:linear-gradient(145deg,#0a2034,#183c58);border-radius:22px;padding:16px;min-height:360px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tryon-stage canvas{width:100%;height:auto;max-height:620px;object-fit:contain;border-radius:16px;background:#081522}.tryon-stage .tryon-generated{width:100%;height:auto;max-height:720px;object-fit:contain;border-radius:16px;background:#081522;display:block}
+.tryon-empty{min-height:330px;display:flex;align-items:center;justify-content:center;text-align:center;color:#e9d7a5;padding:30px}
+.tryon-controls{display:grid;gap:13px}
+.tryon-select,.tryon-file{width:100%;padding:13px;border-radius:12px;border:1px solid #d8c6a2;background:#fffdf7;font:inherit;box-sizing:border-box}.selected-photo{display:none;margin-top:10px;padding:10px;border:1px solid #d8c6a2;border-radius:12px;background:#fffdf7;align-items:center;gap:12px}.selected-photo.show{display:flex}.selected-photo img{width:72px;height:72px;object-fit:cover;border-radius:10px;border:1px solid #d8c6a2}.selected-photo .photo-meta{min-width:0}.selected-photo .photo-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.selected-photo .photo-size{font-size:12px;color:#76644b;margin-top:4px}
+.tryon-status{padding:12px 14px;border-radius:12px;background:#fff3cf;color:#624b20;font-size:14px;line-height:1.45}
+.tryon-chip{display:inline-flex;gap:7px;align-items:center;padding:7px 10px;border-radius:999px;background:#f1e3bf;color:#5e461f;font-size:12px;font-weight:700;margin:4px 4px 0 0}
+.tryon-result{margin-top:14px;padding:14px;border-radius:14px;background:#17344c;color:#fff;font-size:13px}
+@media(max-width:780px){.tryon-shell{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://js.puter.com/v2/"></script>
+
+<script>
+const states = [
+["Gujarat","Ahmedabad","Gujarati","West","🪔","Garba • Bandhani • Patola","Navratri","Rani ki Vav"],
+["Rajasthan","Jaipur","Hindi","North-West","🏰","Ghoomar • Block printing • Folk arts","Gangaur","Amer Fort"],
+["Maharashtra","Mumbai","Marathi","West","🐯","Lavani • Paithani • Warli","Gudi Padwa","Ajanta Caves"],
+["Kerala","Thiruvananthapuram","Malayalam","South","🌴","Kathakali • Kasavu • Boat traditions","Onam","Padmanabhaswamy Temple"],
+["Tamil Nadu","Chennai","Tamil","South","🛕","Bharatanatyam • Kanchipuram silk • Kolam","Pongal","Brihadisvara Temple"],
+["Punjab","Chandigarh","Punjabi","North","🥁","Bhangra • Phulkari • Sikh traditions","Baisakhi","Golden Temple"],
+["Assam","Dispur","Assamese","North-East","🦏","Bihu • Muga silk • Sattriya","Bihu","Kaziranga"],
+["West Bengal","Kolkata","Bengali","East","🎨","Baul • Kantha • Terracotta","Durga Puja","Victoria Memorial"],
+["Odisha","Bhubaneswar","Odia","East","🦚","Odissi • Pattachitra • Silver filigree","Rath Yatra","Konark Sun Temple"],
+["Karnataka","Bengaluru","Kannada","South","🎭","Yakshagana • Mysore silk • Crafts","Mysuru Dasara","Hampi"],
+["Uttar Pradesh","Lucknow","Hindi","North","🕌","Kathak • Chikankari • Craft traditions","Holi","Taj Mahal"],
+["Madhya Pradesh","Bhopal","Hindi","Central","🐅","Folk arts • Tribal crafts • Cuisine","Khajuraho Dance Festival","Sanchi"],
+["Bihar","Patna","Hindi","East","📜","Madhubani • Folk traditions • Cuisine","Chhath","Nalanda"],
+["Goa","Panaji","Konkani","West","🌊","Folk music • Kunbi • Coastal cuisine","Shigmo","Basilica of Bom Jesus"],
+["Himachal Pradesh","Shimla","Hindi","North","🏔️","Nati • Wool crafts • Mountain traditions","Kullu Dussehra","Great Himalayan National Park"],
+["Uttarakhand","Dehradun","Hindi","North","⛰️","Garhwali/Kumaoni traditions • Crafts","Harela","Kedarnath"],
+["Jharkhand","Ranchi","Hindi","East","🌳","Tribal arts • Chhau • Crafts","Sarhul","Parasnath"],
+["Chhattisgarh","Raipur","Hindi","Central","🪶","Tribal dance • Bell metal • Crafts","Bastar Dussehra","Chitrakote"],
+["Telangana","Hyderabad","Telugu","South","💎","Perini • Pochampally • Bonalu traditions","Bonalu","Charminar"],
+["Andhra Pradesh","Amaravati","Telugu","South","🌾","Kuchipudi • Kalamkari • Crafts","Ugadi","Lepakshi"],
+["Sikkim","Gangtok","Nepali/English","North-East","🏔️","Mask dances • Handicrafts • Himalayan culture","Losar","Rumtek"],
+["Arunachal Pradesh","Itanagar","English/Tribal languages","North-East","🦅","Tribal traditions • Weaving • Mask dances","Losar","Tawang Monastery"],
+["Nagaland","Kohima","English","North-East","🪶","Naga folk arts • Weaving • Music","Hornbill Festival","Kisama Heritage Village"],
+["Manipur","Imphal","Meitei","North-East","🪷","Manipuri dance • Handloom • Lai Haraoba","Yaoshang","Kangla Fort"],
+["Mizoram","Aizawl","Mizo","North-East","🌿","Cheraw • Weaving • Community traditions","Chapchar Kut","Mizoram State Museum"],
+["Tripura","Agartala","Bengali/Kokborok","North-East","🛕","Handloom • Folk dance • Crafts","Kharchi Puja","Neermahal"],
+["Meghalaya","Shillong","English/Khasi","North-East","🌧️","Wangala • Weaving • Living root bridges","Wangala","Living Root Bridges"],
+["Haryana","Chandigarh","Hindi","North","🐂","Folk dance • Phulkari • Rural traditions","Teej","Sheikh Chilli Tomb"],
+["Delhi","New Delhi","Hindi","North","🏛️","Multi-cultural traditions • Crafts • Cuisine","Diwali","Red Fort"],
+["Jammu & Kashmir","Srinagar","Kashmiri","North","🏔️","Kashmiri crafts • Music • Pashmina","Baisakhi","Mughal Gardens"],
+["Ladakh","Leh","Ladakhi","North","🗻","Monastic culture • Weaving • Mask dances","Hemis Festival","Thiksey Monastery"],
+["Andaman & Nicobar Islands","Port Blair","Hindi/English","Islands","🐚","Island communities • Crafts • Coastal traditions","Island festivals","Cellular Jail"],
+["Puducherry","Puducherry","Tamil/French","South","🌺","Tamil heritage • Crafts • Coastal culture","Pongal","French Quarter"],
+["Lakshadweep","Kavaratti","Malayalam","Islands","🐠","Island traditions • Coir crafts • Cuisine","Eid traditions","Kavaratti"],
+["Dadra & Nagar Haveli and Daman & Diu","Daman","Gujarati/Hindi","West","🌴","Tribal crafts • Coastal culture • Folk arts","Nariyal Purnima","Diu Fort"]
+];
+
+let user = {name:"Explorer", username:"Bansari", email:"", phone:"", avatar:"🧭", xp:0, coins:0, level:1, completedStates:[], badges:[]};
+let game = {state:null, clues:0, cultureQ:0, civilizationQ:0, festivalQ:0, selectedFestivalState:null, dressState:null};
+let currentScreen = "splash";
+
+function save(){localStorage.setItem("heritageAdventureUser",JSON.stringify(user));}
+function load(){try{const x=JSON.parse(localStorage.getItem("heritageAdventureUser")); if(x) user={...user,...x}}catch(e){}}
+load();
+
+function app(){
+ document.getElementById("app").innerHTML = `
+ <section id="splash" class="screen active splash"><div class="content">
+   <div class="emblem">🏛️</div><h1>INDIA</h1><h2>HERITAGE • HISTORY • CULTURE • ADVENTURE</h2>
+   <p>Your journey through India begins here.</p><button class="btn gold" onclick="show('register')">START YOUR JOURNEY →</button>
+ </div></section>
+ <section id="register" class="screen auth"></section>
+ <section id="login" class="screen auth"></section>
+ <section id="main" class="screen"><div class="app-shell"><header class="topbar" id="topbar"></header><main id="content"></main><footer>INDIA'S HERITAGE IS YOUR JOURNEY • Interactive Heritage Adventure</footer></div></section>
+ <div class="modal" id="modal"></div>`;
+ renderRegister();
+ renderLogin();
+ renderTopbar();
+ show("splash");
+}
+function show(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active"); currentScreen=id;
+ if(id==="main"){renderTopbar();home();}
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderRegister(){
+ document.getElementById("register").innerHTML=`<div class="auth-card">
+ <div class="pass">✦ MUSEUM ADMISSION PASS • NEW EXPLORER ✦</div><h1>Create Your Explorer Profile</h1>
+ <div class="form-grid">
+ <div class="field"><label>Full Name</label><input id="rName" placeholder="Your full name"></div>
+ <div class="field"><label>Username</label><input id="rUser" placeholder="Explorer name"></div>
+ <div class="field"><label>Email</label><input id="rEmail" type="email" placeholder="you@example.com"></div>
+ <div class="field"><label>Contact Number</label><input id="rPhone" placeholder="+91"></div>
+ <div class="field"><label>Password</label><input id="rPass" type="password" placeholder="Create password"></div>
+ <div class="field"><label>Confirm Password</label><input id="rPass2" type="password" placeholder="Confirm password"></div>
+ <div class="field full"><label>Choose Your Avatar</label><div class="avatars">
+ ${["🧭 Explorer","📜 Historian","🔎 Archaeologist","🌏 Cultural Traveller","👑 Royal Explorer"].map((a,i)=>`<button class="avatar-choice ${i===0?'selected':''}" onclick="selectAvatar(this,'${a.split(' ')[0]}')">${a}</button>`).join("")}
+ </div></div></div>
+ <div style="display:flex;gap:10px;justify-content:center;margin-top:22px"><button class="btn gold" onclick="register()">ENTER THE MUSEUM</button><button class="btn light" onclick="show('login')">Already have an account? Login</button></div>
+ </div>`;
+}
+function selectAvatar(el,a){document.querySelectorAll(".avatar-choice").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");user.avatar=a}
+function register(){
+ const n=document.getElementById("rName").value.trim(), un=document.getElementById("rUser").value.trim(), p=document.getElementById("rPass").value, p2=document.getElementById("rPass2").value;
+ if(!n||!un||!p){toast("Please complete your name, username and password.");return}
+ if(p!==p2){toast("Passwords do not match.");return}
+ user.name=n;user.username=un;user.email=document.getElementById("rEmail").value;user.phone=document.getElementById("rPhone").value;save();show("main");home();toast("Welcome, Explorer! Your journey begins.");
+}
+function renderLogin(){
+ document.getElementById("login").innerHTML=`<div class="auth-card" style="max-width:500px">
+ <div class="pass">✦ ANCIENT MUSEUM ACCESS PASS ✦</div><h1>Welcome Back, Explorer</h1>
+ <div class="field"><label>Email / Username</label><input id="lUser" placeholder="Enter username"></div>
+ <div class="field" style="margin-top:12px"><label>Password</label><input id="lPass" type="password" placeholder="Password"></div>
+ <div style="margin:14px 0"><label><input type="checkbox"> Remember Me</label></div>
+ <button class="btn gold" style="width:100%" onclick="login()">LOGIN</button>
+ <div style="text-align:center;margin-top:15px"><button class="btn light" onclick="show('register')">Create New Account</button><button class="btn light" style="margin-left:6px" onclick="toast('Password recovery demo: contact the museum administrator.')">Forgot Password</button></div>
+ </div>`;
+}
+function login(){const v=document.getElementById("lUser").value.trim(); if(v)user.username=v;save();show("main");home();toast("Welcome back!");}
+function renderTopbar(){
+ document.getElementById("topbar").innerHTML=`<div class="brand"><span>🪔</span> HERITAGE ADVENTURE</div>
+ <button class="hamb" onclick="document.querySelector('.nav').classList.toggle('open')">☰</button>
+ <nav class="nav"><button onclick="home()">HOME</button><button onclick="journey()">GAMES</button><button onclick="explore()">EXPLORE</button><button onclick="rewards()">REWARDS</button><button onclick="profile()">PROFILE</button></nav>
+ <div class="stats"><span class="pill">🪙 <b id="coins">${user.coins}</b></span><span class="pill">⭐ <b id="xp">${user.xp}</b></span><button class="pill" onclick="profile()">${user.avatar} ${user.username}</button></div>`;
+}
+function home(){
+ setContent(`<div class="page"><section class="hero"><h1>Namaste, ${esc(user.username)}! 🙏</h1><p>Ready to explore the incredible heritage of India? Discover artifacts, solve mysteries, walk sacred paths and celebrate traditions through play.</p><div class="stats-row"><span class="pill">⭐ ${user.xp} XP</span><span class="pill">🪙 ${user.coins} Coins</span><span class="pill">🏆 Level ${user.level}</span><span class="pill">🗺️ ${user.completedStates.length} States Explored</span></div></section>
+ <div class="grid4">
+ ${action("🏛️","PLAY JOURNEY","Begin your adventure through India's history, culture, civilization and festivals.","journey")}
+ ${action("🗺️","EXPLORE INDIA","Discover the history, culture, traditions, festivals and heritage of Indian states.","explore")}
+ ${action("📜","RULES & REGULATIONS","Learn how each level works and how to earn coins and XP.","rules")}
+ ${action("🏆","REWARDS","Track your coins, XP, achievements and completed levels.","rewards")}
+ </div>
+ <div class="section-title"><h2>Your Journey</h2><button class="btn light" onclick="journey()">View Map →</button></div>${journeyStrip()}</div>`);
+}
+function action(icon,title,desc,fn){return `<button class="card action" onclick="${fn}()" style="text-align:left"><div class="icon">${icon}</div><h3>${title}</h3><p>${desc}</p><span class="tag">ENTER EXHIBIT →</span></button>`}
+function journeyStrip(){
+ let levels=[
+  ["🏛️","THE LOST TREASURE","History"],
+  ["🌉","THE SACRED PATH","Culture"],
+  ["🪷","THE ANCIENT HOP","Civilization"],
+  ["🎉","FESTIVAL DETECTIVE","Festivals"],
+  ["✨","THE SURPRISE CHAMBER","Surprise"]
+ ];
+ return `<div class="journey">${levels.map((l,i)=>{
+   const levelNo=i+1;
+   const locked=levelNo===5 && user.level<5;
+   const done=(levelNo<5 && user.level>levelNo) || (levelNo===5 && user.level>=6);
+   const status=locked?'🔒':done?'✓':'OPEN';
+   return `<div class="card level-card ${locked?'locked':''}" onclick="${locked?'lockedMsg()':`startLevel(${levelNo})`}">
+     <span class="locked-badge">${status}</span>
+     <div class="level-icon">${l[0]}</div>
+     <h3>LEVEL ${levelNo}</h3><b>${l[1]}</b><p class="muted">${l[2]}</p>
+   </div>${i<4?'<div class="journey-line"></div>':''}`
+ }).join("")}</div>`;
+}
+function journey(){setContent(`<div class="page"><section class="hero"><h1>🧭 The Heritage Journey</h1><p>Five adventures. One journey across India. Complete each chapter to unlock the next world.</p></section><div class="section-title"><h2>Progression</h2><span class="tag">LEVEL ${user.level} AVAILABLE</span></div>${journeyStrip()}<div class="notice">Learning cycle: <b>DISCOVER → LEARN → PLAY → SOLVE → REWARD → EXPLORE → PROGRESS</b></div></div>`)}
+function startLevel(n){
+ if(n===5 && user.level<5){lockedMsg();return}
+ if(n===1)lostTreasure();
+ if(n===2)sacredPath();
+ if(n===3)ancientHop();
+ if(n===4)festivalDetective();
+ if(n===5)surpriseChamber();
+}
+function lockedMsg(){toast("Complete the previous chapter to unlock this adventure.");}
+function lostTreasure(){
+ game.clues=0; game.state=null;
+ setContent(`<div class="page"><div class="game"><div class="game-inner"><div class="game-top"><div><span class="tag">LEVEL 1 • HISTORY</span><h1>🏛️ THE LOST TREASURE</h1><p>Discover the hidden history of your chosen Indian state.</p></div><button class="btn light" onclick="journey()">Exit</button></div>
+ <div class="game-stage">${statePicker("Choose Your Historical Destination","lostStateSelected")}</div></div></div></div>`);
+}
+function statePicker(title,fn){
+ return `<div class="clue"><h2>${title}</h2><p>Select a state to open its museum exhibits.</p><div class="states-grid" style="margin-top:15px">${states.map((s,i)=>`<button class="state-btn" onclick="${fn}(${i})">${s[4]}<br><b>${s[0]}</b></button>`).join("")}</div></div>`;
+}
+function lostStateSelected(i){game.state=i; const s=states[i]; setContent(`<div class="page"><div class="game"><div class="game-inner"><span class="tag">LEVEL 1 • HISTORY • ${s[0]}</span><h1>🏛️ ${s[0]} Historical Museum</h1><div class="tabs">${["Ancient History","Historical Kingdoms","Important Places","Personalities","Important Events"].map((x,j)=>`<button class="tab ${j===0?'active':''}">${x}</button>`).join("")}</div><div class="grid2">
+ <div class="clue"><div class="big">${s[4]}</div><h2>Interactive Exhibit</h2><p><b>Region:</b> ${s[3]}</p><p>Explore origins, historical timelines, important places, dynasties, personalities and events connected to ${s[0]}.</p><p><b>Featured heritage:</b> ${s[7]}.</p></div>
+ <div class="clue"><h2>Ready for the Treasure Hunt?</h2><p>Study the exhibit, then solve three clues to unlock the treasure chest.</p><button class="btn gold" onclick="beginClues()">START TREASURE HUNT →</button></div></div></div></div></div>`)}
+function beginClues(){game.clues=0;showClue()}
+function showClue(){
+ const s=states[game.state];const clues=[
+ [`CLUE 1`,`I am a landmark associated with ${s[0]}. I stand as a reminder of the region's heritage. Which featured place belongs to this journey?`,s[7],[s[7],"Taj Mahal","Gateway of India"]],
+ [`CLUE 2`,`This state's heritage includes the cultural tradition: ${s[5]}. Which description is connected to ${s[0]}?`,s[5],["${s[5]}","Kathakali and Kasavu","Bhangra and Phulkari"]],
+ [`CLUE 3`,`Which major festival is associated with this state's cultural calendar?`,s[6],[s[6],"Onam","Bihu"]]
+ ][game.clues];
+ setContent(`<div class="page"><div class="game"><div class="game-top"><div><span class="tag">TREASURE HUNT • CLUE ${game.clues+1}/3</span><h1>🗺️ THE LOST TREASURE</h1></div><div class="pill">🪙 +10 • ⭐ +50</div></div>
+ <div class="game-stage"><div class="clue"><div class="big">🧭</div><h2>${clues[0]}</h2><p>${clues[1]}</p><div class="answers">${clues[3].map((a,j)=>`<button class="answer" onclick="answerClue(${j},'${escapeAttr(clues[2])}')">${a}</button>`).join("")}</div></div></div>
+ <div class="progress"><span style="width:${game.clues/3*100}%"></span></div></div></div>`);
+}
+function answerClue(j,correct){if(j!==0){toast("Not quite. Review the exhibit and try again.");return}gain(50,10);game.clues++;if(game.clues<3){toast("Correct! Clue unlocked.");showClue()}else{treasureFound();}}
+function treasureFound(){const i=game.state;if(!user.completedStates.includes(i))user.completedStates.push(i);save(); if(user.level<2 && user.completedStates.length>=2){user.level=2;addBadge("🏛️","History Explorer");save()}setContent(`<div class="page"><div class="game" style="text-align:center"><div class="game-inner"><div style="font-size:100px;animation:float 2s infinite">🧰</div><h1>✨ TREASURE FOUND!</h1><p>You solved all three clues in ${states[i][0]}.</p><h2>+150 XP • +30 Coins</h2>${user.level>=2?'<div class="notice">🌉 <b>LEVEL 2 UNLOCKED!</b> You completed the required state journeys.</div>':'<div class="notice">Complete one more state to unlock Level 2.</div>'}<button class="btn gold" onclick="journey()">CONTINUE JOURNEY</button></div></div></div>`);gain(100,20)}
+function sacredPath(){game.cultureQ=0;setContent(`<div class="page"><div class="game"><div class="game-inner"><span class="tag">LEVEL 2 • CULTURE</span><h1>🌉 THE SACRED PATH</h1><p>Study cultural traditions, then cross the correct plank.</p>${statePicker("Choose a Cultural Destination","cultureState")}</div></div></div>`)}
+function cultureState(i){game.state=i;game.cultureQ=0;cultureQuestion()}
+function cultureQuestion(){
+ const s=states[game.state], qs=[
+ ["Which language is listed for this state?",s[2],["Gujarati","Malayalam","Tamil"]],
+ ["Which cultural tradition is associated with this state?",s[5],["Bhangra • Phulkari","Kathakali • Kasavu","Kuchipudi • Kalamkari"]],
+ ["Which festival is highlighted for this state?",s[6],["Onam","Bihu","Gudi Padwa"]]
+ ];let q=qs[game.cultureQ];
+ setContent(`<div class="page"><div class="game"><div class="game-inner"><div class="game-top"><div><span class="tag">LEVEL 2 • QUESTION ${game.cultureQ+1}/3 • ${s[0]}</span><h1>🌉 THE SACRED PATH</h1></div><span class="pill">⭐ ${user.xp} XP</span></div><div class="clue"><h2>${q[0]}</h2><p>Choose the plank that carries you safely forward.</p></div><div class="planks">${q[2].map((a,j)=>`<button class="plank" onclick="cultureAnswer(${j})">${a}</button>`).join("")}</div><div class="notice" style="color:#30271e">Correct answers let your explorer jump safely. A wrong plank breaks and sends you back to review the exhibit.</div></div></div></div>`);
+}
+function cultureAnswer(j){if(j!==0){toast("Oops! You chose the wrong path. Review the cultural exhibit and try again.");return}gain(40,10);game.cultureQ++;if(game.cultureQ<3)cultureQuestion();else{addBadge("🎭","Culture Explorer");if(user.level<3)user.level=3;save();completion("🌉 THE SACRED PATH COMPLETED!","🎭 Cultural Explorer badge");}}
+function ancientHop(){
+ game.civilizationQ=0;
+ setContent(`<div class="page"><div class="game"><div class="game-inner">
+ <div class="game-top"><div><span class="tag">LEVEL 3 • CIVILIZATION</span><h1>🪷 THE ANCIENT HOP</h1>
+ <p>Hop through an ancient archaeological playground and answer three civilization questions.</p></div>
+ <button class="btn light" onclick="journey()">Exit</button></div>
+ <div class="hop-grid">
+ ${Array.from({length:9},(_,i)=>`<div class="tile ${i===0?'player':''} ${i===2||i===5||i===8?'question':''}">${i===0?'🧑':(i===2||i===5||i===8)?'?':'◈'}</div>`).join("")}
+ </div>
+ <div class="clue" style="color:#30271e">
+   <div class="big">🪷</div>
+   <h2>Ancient Indian Civilization</h2>
+   <p>Move through the hopscotch-style path. Three checkpoints test what you have learned about education, science, mathematics, architecture, medicine, literature, cities, trade and astronomy.</p>
+   <button class="btn gold" onclick="civilizationQuestion()">JUMP TO CHECKPOINT →</button>
+ </div>
+ </div></div></div>`);
+}
+function civilizationQuestion(){
+ const qs=[
+ ["Which ancient civilization is associated with cities such as Harappa and Mohenjo-daro?","Indus Valley Civilization",["Indus Valley Civilization","Roman Civilization","Mayan Civilization"]],
+ ["Which field is represented by the ancient Indian knowledge tradition of Jyotisha?", "Astronomy",["Astronomy","Modern aviation","Ocean engineering"]],
+ ["Which ancient centre is associated with learning in the Indian subcontinent?","Nalanda",["Nalanda","Canterbury","Alexandria"]]
+ ];let q=qs[game.civilizationQ];setContent(`<div class="page"><div class="game"><div class="game-inner"><span class="tag">ANCIENT HOP • CHECKPOINT ${game.civilizationQ+1}</span><h1>🪷 Civilization Challenge</h1><div class="clue"><h2>${q[0]}</h2><div class="answers">${q[2].map((a,j)=>`<button class="answer" onclick="civilizationAnswer(${j})">${a}</button>`).join("")}</div></div></div></div></div>`);
+}
+function civilizationAnswer(j){if(j!==0){toast("Wrong answer. Hop back to the previous checkpoint and try again.");return}gain(50,12);game.civilizationQ++;if(game.civilizationQ<3)ancientHop();else{addBadge("🪷","Civilization Explorer");if(user.level<4)user.level=4;save();completion("🪷 ANCIENT HOP COMPLETED!","🪷 Civilization Explorer badge");}}
+function festivalDetective(){game.festivalQ=0;game.selectedFestivalState=null;setContent(`<div class="page"><div class="game"><div class="game-inner"><span class="tag">LEVEL 4 • FESTIVALS</span><h1>🎉 FESTIVAL DETECTIVE</h1><p>Learn about celebrations, then identify the festival represented by the visual clue.</p>${statePicker("Choose a Festival Destination","festivalState")}</div></div></div>`)}
+function festivalState(i){game.selectedFestivalState=i;game.festivalQ=0;festivalQuestion()}
+function festivalQuestion(){
+ const s=states[game.selectedFestivalState], qs=[
+ ["Which festival is highlighted for this state?",s[6],[""+s[6],"Onam","Bihu"]],
+ ["Which heritage place is connected to this state?",s[7],[""+s[7],"Konark Sun Temple","Hampi"]],
+ ["Which region is this state associated with?",s[3],[""+s[3],"South","North-East"]],
+ ["Which language is listed for this state?",s[2],[""+s[2],"Hindi","Tamil"]],
+ ["Which cultural tradition is listed for this state?",s[5],[""+s[5],"Bhangra • Phulkari","Kathakali • Kasavu"]]
+ ];let q=qs[game.festivalQ];
+ setContent(`<div class="page"><div class="game"><div class="game-inner"><div class="game-top"><div><span class="tag">FESTIVAL DETECTIVE • ${game.festivalQ+1}/5</span><h1>🎉 ${s[0]}</h1></div><span class="pill">🪙 Rewards on correct answer</span></div><div class="festival-img">${s[4]}</div><div class="clue"><h2>${q[0]}</h2><div class="answers">${q[2].map((a,j)=>`<button class="answer" onclick="festivalAnswer(${j})">${a}</button>`).join("")}</div></div></div></div></div>`);
+}
+function festivalAnswer(j){if(j!==0){toast("Detective clue: revisit the exhibit and try again.");return}gain(45,10);game.festivalQ++;if(game.festivalQ<5)festivalQuestion();else{addBadge("🎉","Festival Detective");user.level=5;save();completion("🎉 FESTIVAL DETECTIVE COMPLETED!","🎉 Festival Detective badge • Level 5 unlocked");}}
+const heritageAttire = {
+  "Gujarat": {kind:"chaniya", label:"Gujarati Chaniya Choli", motif:"mirror work • bandhani", a:"#d34b35", b:"#f0c34a"},
+  "Rajasthan": {kind:"ghagra", label:"Rajasthani Ghagra Choli", motif:"bandhani • leheriya", a:"#c7353f", b:"#f2b84b"},
+  "Maharashtra": {kind:"sari", label:"Maharashtrian Nauvari", motif:"traditional drape • zari", a:"#7b2f45", b:"#e4b84a"},
+  "Kerala": {kind:"sari", label:"Kerala Kasavu", motif:"cream • gold border", a:"#f4ead1", b:"#c89a3b"},
+  "Tamil Nadu": {kind:"sari", label:"Tamil Kanchipuram Silk", motif:"silk • zari border", a:"#8d2e3b", b:"#e3b84d"},
+  "Punjab": {kind:"salwar", label:"Punjabi Salwar Kameez", motif:"phulkari embroidery", a:"#315a9b", b:"#f0b72f"},
+  "Assam": {kind:"mekhela", label:"Assamese Mekhela Chador", motif:"Muga silk • red border", a:"#e8d9b4", b:"#9d2f32"},
+  "West Bengal": {kind:"sari", label:"Bengali Tant Saree", motif:"red border • handloom", a:"#f0eee0", b:"#a72e35"},
+  "Odisha": {kind:"sari", label:"Odisha Sambalpuri Saree", motif:"ikat • traditional border", a:"#7d2832", b:"#e0b646"},
+  "Karnataka": {kind:"sari", label:"Karnataka Ilkal Saree", motif:"Ilkal weave • red pallu", a:"#b54a31", b:"#e0b34d"},
+  "Uttar Pradesh": {kind:"sari", label:"Uttar Pradesh Banarasi Silk", motif:"brocade • zari", a:"#3d547f", b:"#d5a33e"},
+  "Madhya Pradesh": {kind:"sari", label:"Madhya Pradesh Chanderi", motif:"light handloom • zari", a:"#c6a86a", b:"#8f3c35"},
+  "Bihar": {kind:"sari", label:"Bihar Madhubani-Inspired Handloom", motif:"handloom • folk motifs", a:"#a84a35", b:"#e1bd52"},
+  "Goa": {kind:"sari", label:"Goan Traditional Saree", motif:"coastal handloom • gold", a:"#247d78", b:"#e2b64a"},
+  "Himachal Pradesh": {kind:"shawl", label:"Himachali Traditional Attire", motif:"wool shawl • regional patterns", a:"#4b6677", b:"#d4a64a"},
+  "Uttarakhand": {kind:"shawl", label:"Uttarakhand Traditional Attire", motif:"pahadi textile • wool", a:"#8b3f42", b:"#d8ad4d"},
+  "Jharkhand": {kind:"sari", label:"Jharkhand Traditional Handloom", motif:"regional weave • red border", a:"#7b3e38", b:"#d9aa43"},
+  "Chhattisgarh": {kind:"sari", label:"Chhattisgarhi Kosa Silk", motif:"Kosa silk • tribal-inspired border", a:"#76502f", b:"#d6ad45"},
+  "Telangana": {kind:"sari", label:"Telangana Pochampally Ikat", motif:"ikat • geometric weave", a:"#8c2d37", b:"#d9b13e"},
+  "Andhra Pradesh": {kind:"sari", label:"Andhra Uppada Silk", motif:"silk • zari", a:"#315f83", b:"#d7aa3d"},
+  "Sikkim": {kind:"robe", label:"Sikkim Traditional Bakhu", motif:"Himalayan robe • woven sash", a:"#4b405f", b:"#c79c45"},
+  "Arunachal Pradesh": {kind:"robe", label:"Arunachal Traditional Wrap", motif:"woven textile • geometric bands", a:"#7a3d3d", b:"#d1a34a"},
+  "Nagaland": {kind:"shawl", label:"Naga Traditional Textile", motif:"bold woven shawl • geometric bands", a:"#303b55", b:"#c83d39"},
+  "Manipur": {kind:"sari", label:"Manipuri Phanek-Inspired Attire", motif:"Phanek • woven patterns", a:"#71394b", b:"#d3a443"},
+  "Mizoram": {kind:"shawl", label:"Mizo Puan-Inspired Attire", motif:"Puan textile • stripes", a:"#263e62", b:"#d04b43"},
+  "Tripura": {kind:"sari", label:"Tripuri Traditional Handloom", motif:"Rignai-inspired weave", a:"#713d45", b:"#d7ad45"},
+  "Meghalaya": {kind:"shawl", label:"Khasi Traditional Attire", motif:"Jainsem-inspired wrap • woven textile", a:"#8b413c", b:"#d4a749"},
+  "Haryana": {kind:"salwar", label:"Haryanvi Traditional Attire", motif:"regional dupatta • handloom", a:"#42657c", b:"#d8ad43"},
+  "Delhi": {kind:"sari", label:"Delhi Heritage Ensemble", motif:"North Indian textile • zari", a:"#65446d", b:"#d8ae45"},
+  "Jammu & Kashmir": {kind:"robe", label:"Kashmiri Traditional Pheran", motif:"pheran • embroidered details", a:"#49627c", b:"#d2a84b"},
+  "Ladakh": {kind:"robe", label:"Ladakhi Traditional Goncha", motif:"wool robe • sash", a:"#71523b", b:"#d1a54a"},
+  "Andaman & Nicobar Islands": {kind:"shawl", label:"Andaman & Nicobar Cultural Wrap", motif:"island-inspired textile", a:"#28756e", b:"#e0b44a"},
+  "Puducherry": {kind:"sari", label:"Puducherry Traditional Saree", motif:"South Indian handloom • gold", a:"#4c6782", b:"#d9b047"},
+  "Lakshadweep": {kind:"shawl", label:"Lakshadweep Traditional Wrap", motif:"island textile • coastal palette", a:"#247a79", b:"#e0b64d"},
+  "Dadra & Nagar Haveli and Daman & Diu": {kind:"shawl", label:"Dadra & Nagar Haveli and Daman & Diu Tribal-Inspired Attire", motif:"regional woven textile", a:"#7b4b38", b:"#d6aa45"}
+};
+let tryonImage = null, tryonDataUrl = "", tryonBusy = false, generatedTryonUrl = "";
+
+const heritageScene = {
+  "Gujarat":"a softly blurred Gujarat heritage setting inspired by Patan stepwells and traditional craft streets",
+  "Rajasthan":"a softly blurred Rajasthan heritage setting inspired by Jaipur palaces and desert architecture",
+  "Maharashtra":"a softly blurred Maharashtra heritage setting inspired by historic Maratha architecture and festive streets",
+  "Kerala":"a softly blurred Kerala setting with traditional architecture, palms and a calm backwater atmosphere",
+  "Tamil Nadu":"a softly blurred Tamil Nadu temple-town setting with South Indian stone architecture",
+  "Punjab":"a softly blurred Punjab setting with warm rural architecture and festive Punjabi atmosphere",
+  "Assam":"a softly blurred Assam setting with lush greenery and traditional Assamese architecture",
+  "West Bengal":"a softly blurred Bengal heritage setting with elegant colonial and Bengali architectural details",
+  "Odisha":"a softly blurred Odisha heritage setting inspired by temple architecture and coastal light",
+  "Karnataka":"a softly blurred Karnataka heritage setting inspired by Hampi and traditional South Indian architecture",
+  "Uttar Pradesh":"a softly blurred Uttar Pradesh heritage setting inspired by Banaras ghats and historic architecture",
+  "Madhya Pradesh":"a softly blurred Madhya Pradesh heritage setting inspired by historic forts and temple architecture",
+  "Bihar":"a softly blurred Bihar heritage setting inspired by ancient Buddhist and folk-cultural surroundings",
+  "Goa":"a softly blurred Goa setting with Portuguese-influenced heritage architecture and tropical greenery",
+  "Himachal Pradesh":"a softly blurred Himachal setting with mountain villages, pine trees and Himalayan scenery",
+  "Uttarakhand":"a softly blurred Uttarakhand setting with Himalayan foothills and traditional hill architecture",
+  "Jharkhand":"a softly blurred Jharkhand setting with forest greenery and regional folk-art atmosphere",
+  "Chhattisgarh":"a softly blurred Chhattisgarh setting with forest landscape and regional craft atmosphere",
+  "Telangana":"a softly blurred Telangana heritage setting inspired by Hyderabad architecture and Deccan culture",
+  "Andhra Pradesh":"a softly blurred Andhra Pradesh setting with temple architecture and South Indian landscape",
+  "Sikkim":"a softly blurred Sikkim mountain setting with Himalayan greenery and traditional architecture",
+  "Arunachal Pradesh":"a softly blurred Arunachal Pradesh Himalayan setting with forested mountains and regional architecture",
+  "Nagaland":"a softly blurred Nagaland setting with hill scenery and traditional Naga architectural elements",
+  "Manipur":"a softly blurred Manipur setting with green hills and traditional cultural surroundings",
+  "Mizoram":"a softly blurred Mizoram hill setting with lush greenery and traditional Mizo surroundings",
+  "Tripura":"a softly blurred Tripura setting with palace-inspired architecture and tropical greenery",
+  "Meghalaya":"a softly blurred Meghalaya setting with lush hills, clouds and Khasi cultural surroundings",
+  "Haryana":"a softly blurred Haryana rural heritage setting with traditional North Indian architecture",
+  "Delhi":"a softly blurred Delhi heritage setting inspired by historic Mughal and Indo-Islamic architecture",
+  "Jammu & Kashmir":"a softly blurred Kashmir setting inspired by Dal Lake, houseboats, shikaras and snow-capped mountains",
+  "Ladakh":"a softly blurred Ladakh setting with dramatic Himalayan mountains and traditional architecture",
+  "Andaman & Nicobar Islands":"a softly blurred Andaman coastal setting with tropical greenery and calm blue water",
+  "Puducherry":"a softly blurred Puducherry heritage setting with French-influenced streets and coastal light",
+  "Lakshadweep":"a softly blurred Lakshadweep coastal setting with turquoise water and tropical scenery",
+  "Dadra & Nagar Haveli and Daman & Diu":"a softly blurred western Indian coastal-forest heritage setting with regional craft details"
+};
+
+function buildHeritagePrompt(stateName, a){
+  const scene=heritageScene[stateName]||`a softly blurred ${stateName} heritage setting`;
+  if(stateName==="Jammu & Kashmir"){
+    return `Edit the uploaded portrait into a photorealistic Kashmiri heritage portrait. Keep the exact same person, face, facial features, skin tone, age, dark-rimmed glasses, hairstyle and natural expression recognizable. Preserve the original head position and overall portrait composition. Replace the modern shirt completely with an authentic traditional Kashmiri pheran in rich deep burgundy/maroon, with elegant Kashmiri floral embroidery and fine woven texture. Add a coordinated Kashmiri embroidered shawl/dupatta naturally around the shoulders and subtle traditional silver filigree earrings and necklace. Do not distort the face or glasses. Do not duplicate the person. Use realistic fabric folds, natural lighting, believable shadows and photographic skin texture. Place the person in ${scene}, softly blurred with realistic depth of field, warm natural daylight, tasteful colors, culturally respectful styling. The result must look like a real photograph of the same person after changing into Kashmiri traditional attire, not an illustration, costume overlay, collage, or cartoon.`;
+  }
+  return `Edit the uploaded portrait into a photorealistic ${stateName} heritage portrait. Keep the exact same person, face, facial features, skin tone, age, glasses if present, hairstyle and natural expression recognizable. Preserve the original head position and overall portrait composition. Replace the modern clothing completely with authentic traditional attire represented by ${a.label}. Use culturally appropriate ${a.motif}, realistic fabric texture, natural folds, believable tailoring and tasteful traditional accessories where appropriate. Do not distort the face, glasses or hands. Do not duplicate the person. Use realistic photographic lighting, natural skin texture and shadows. Place the person in ${scene}, softly blurred with realistic depth of field. The final image should look like a real photograph of the same person wearing ${a.label}, not an illustration, costume overlay, collage, or cartoon.`;
+}
+
+function surpriseChamber(){
+  setContent(`<div class="page"><div class="chamber"><span class="tag">LEVEL 5 • SURPRISE</span><h1>✨ THE SURPRISE CHAMBER</h1><p>Upload your photo, choose a state or UT, and let AI transform your portrait into traditional Indian attire while keeping you recognizable.</p>
+  <div class="tryon-shell"><div class="tryon-stage" id="tryonStage"><div class="tryon-empty" id="tryonEmpty"><div><div style="font-size:72px">🧑🏽‍🎨</div><b>Your AI heritage portrait will appear here</b><p class="small">Best results: a clear, front-facing portrait with your shoulders and upper body visible.</p></div></div><canvas id="tryonCanvas" style="display:none"></canvas><img id="tryonGenerated" class="tryon-generated" alt="AI transformed heritage portrait" style="display:none"></div>
+  <div class="tryon-controls"><div><label><b>1. Choose your photo</b></label><input class="tryon-file" type="file" accept="image/jpeg,image/png,image/webp,image/*" id="photoInput" onchange="previewPhoto(event)"><div class="selected-photo" id="selectedPhoto"><img id="selectedPhotoThumb" alt="Selected photo preview"><div class="photo-meta"><div class="photo-name" id="selectedPhotoName"></div><div class="photo-size" id="selectedPhotoSize"></div><div class="small">✓ Photo selected and ready for AI editing</div></div></div></div>
+  <div><label><b>2. Choose a state / UT</b></label><select class="tryon-select" id="dressState" onchange="updateTryonInfo()">${states.map((s,i)=>`<option value="${i}">${s[0]} — ${s[5].split(" • ")[0]}</option>`).join("")}</select></div>
+  <div id="attireInfo" class="tryon-status"></div><button class="btn gold" id="tryonBtn" onclick="experience()">✨ TRANSFORM INTO TRADITIONAL ATTIRE</button>
+  <div id="tryonStatus" class="tryon-status">Ready. Select a photo and state.</div><div class="tryon-result"><b>✨ AI transformation</b><br>Your browser calls Puter.js directly. There is no API key or application server in this HTML; the AI service handles the generation for the user.</div>
+  </div></div></div></div>`);
+  updateTryonInfo();
+}
+
+function previewPhoto(e){
+  const f=e.target.files && e.target.files[0]; if(!f)return;
+  if(!f.type || !f.type.startsWith("image/")){setTryonStatus("Please choose a JPG, PNG, or WebP image.");return;}
+  const thumb=document.getElementById("selectedPhotoThumb"), card=document.getElementById("selectedPhoto"), name=document.getElementById("selectedPhotoName"), size=document.getElementById("selectedPhotoSize");
+  if(name)name.textContent=f.name;
+  if(size)size.textContent=(f.size/1024/1024).toFixed(2)+" MB";
+  const reader=new FileReader();
+  reader.onload=()=>{
+    tryonDataUrl=reader.result;
+    if(thumb)thumb.src=tryonDataUrl;
+    if(card)card.classList.add("show");
+    const img=new Image();
+    img.onload=()=>{tryonImage=img; drawPreview(); setTryonStatus("Photo selected successfully. Choose the state and press Transform.");};
+    img.onerror=()=>{setTryonStatus("This image could not be read. Please choose another photo.");};
+    img.src=tryonDataUrl;
+  };
+  reader.onerror=()=>setTryonStatus("The photo could not be loaded. Please try again.");
+  reader.readAsDataURL(f);
+}
+
+function updateTryonInfo(){
+  const i=+document.getElementById("dressState").value, s=states[i], a=heritageAttire[s[0]]||heritageAttire["Delhi"];
+  const box=document.getElementById("attireInfo"); if(box)box.innerHTML=`<b>${a.label}</b><br><span class="small">${a.motif}</span>`;
+}
+function setTryonStatus(msg){const el=document.getElementById("tryonStatus");if(el)el.textContent=msg}
+function drawPreview(){
+  const c=document.getElementById("tryonCanvas"),empty=document.getElementById("tryonEmpty"),generated=document.getElementById("tryonGenerated");
+  if(!c||!tryonImage)return;
+  if(generated)generated.style.display="none";
+  if(empty)empty.style.display="none";
+  c.style.display="block";
+  const max=900,scale=Math.min(1,max/tryonImage.width);
+  c.width=Math.round(tryonImage.width*scale);c.height=Math.round(tryonImage.height*scale);
+  c.getContext("2d").drawImage(tryonImage,0,0,c.width,c.height);
+}
+
+async function experience(){
+  if(!tryonDataUrl){toast("Please upload a photo first.");return}
+  if(!window.puter || !puter.ai || typeof puter.ai.txt2img!=="function"){
+    setTryonStatus("AI service is still loading. Please refresh the page and try again.");
+    toast("AI service is not ready yet.");
+    return;
+  }
+  const i=+document.getElementById("dressState").value,s=states[i],a=heritageAttire[s[0]]||heritageAttire["Delhi"];
+  const btn=document.getElementById("tryonBtn"),generated=document.getElementById("tryonGenerated"),canvas=document.getElementById("tryonCanvas"),empty=document.getElementById("tryonEmpty");
+  btn.disabled=true;tryonBusy=true;btn.textContent="✨ GENERATING YOUR HERITAGE PORTRAIT…";
+  setTryonStatus(`AI is transforming your photo into ${a.label}. This can take a little while…`);
+  try{
+    const result=await puter.ai.txt2img({
+      prompt:buildHeritagePrompt(s[0],a),
+      model:"openai/gpt-image-2.5-sunburst",
+      quality:"high",
+      input_image:tryonDataUrl,
+      ratio:{w:2,h:3}
+    });
+    let src="";
+    if(result && typeof result.src==="string") src=result.src;
+    else if(result && result.image_url && typeof result.image_url.url==="string") src=result.image_url.url;
+    else if(result && result.data && result.data[0]) src=result.data[0].url || (result.data[0].b64_json?`data:image/png;base64,${result.data[0].b64_json}`:"");
+    if(!src) throw new Error("The AI service returned no image.");
+    generated.src=src;generated.style.display="block";canvas.style.display="none";if(empty)empty.style.display="none";
+    generatedTryonUrl=src;
+    setTryonStatus(`Done — your ${s[0]} traditional-attire portrait is ready.`);
+    addBadge("✨","Heritage Master");gain(100,30);toast("✨ AI heritage portrait created for "+s[0]+"!");
+  }catch(err){
+    console.error(err);
+    setTryonStatus("The AI transformation could not be completed. Please try again; if prompted, sign in to the AI service.");
+    toast("AI transformation failed. Please try again.");
+  }finally{
+    tryonBusy=false;btn.disabled=false;btn.textContent="✨ TRANSFORM INTO TRADITIONAL ATTIRE";
+  }
+}
+
+function explore(){
+ setContent(`<div class="page"><section class="hero"><h1>🗺️ EXPLORE INDIA</h1><p>Travel beyond the journey. Select a state to discover its history, culture, civilization, festivals and famous heritage.</p></section><div class="map" style="margin-top:20px"><div class="india-map"><h2>Interactive India Map</h2><p class="small">Select a region/state below.</p><div class="states-grid">${states.map((s,i)=>`<button class="state-btn" onclick="stateInfo(${i})">${s[4]}<br><b>${s[0]}</b></button>`).join("")}</div></div><div id="stateInfo" class="info"><h2>Select a state</h2><p class="muted">A museum exhibit will appear here.</p></div></div></div>`);
+}
+function stateInfo(i){const s=states[i];document.getElementById("stateInfo").innerHTML=`<div style="font-size:45px">${s[4]}</div><h2>${s[0]}</h2><div class="tabs">${["Quick Facts","History","Culture","Civilization","Festivals","Famous Heritage"].map((x,j)=>`<button class="tab ${j===0?'active':''}">${x}</button>`).join("")}</div><p><b>Capital:</b> ${s[1]}</p><p><b>Language(s):</b> ${s[2]}</p><p><b>Region:</b> ${s[3]}</p><hr><h3>Culture</h3><p>${s[5]}</p><h3>Festival</h3><p>${s[6]}</p><h3>Famous Heritage</h3><p>${s[7]}</p><button class="btn gold" onclick="toast('State added to your exploration log.')">＋ Add to My Exploration</button>`}
+function rewards(){
+ setContent(`<div class="page"><section class="hero"><h1>🏆 REWARDS DASHBOARD</h1><p>Your museum passport records every clue solved, state explored and chapter completed.</p></section><div class="rewards" style="margin-top:20px"><div class="card"><span class="tag">TOTAL COINS</span><div class="metric">🪙 ${user.coins}</div></div><div class="card"><span class="tag">TOTAL XP</span><div class="metric">⭐ ${user.xp}</div></div><div class="card"><span class="tag">LEVELS</span><div class="metric">${Math.min(user.level-1,5)}/5</div></div></div><div class="section-title"><h2>Achievements</h2></div><div class="badges">${[["🏛️","History Explorer"],["🎭","Culture Explorer"],["🪷","Civilization Explorer"],["🎉","Festival Detective"],["✨","Heritage Master"],["🏆","India Explorer"]].map(b=>`<div class="card badge" style="opacity:${user.badges.includes(b[1])?1:.45}"><div class="medal">${b[0]}</div><div><b>${b[1]}</b><div class="small muted">${user.badges.includes(b[1])?'Unlocked':'Locked'}</div></div></div>`).join("")}</div><div class="section-title"><h2>Five-Level Passport</h2></div>${["THE LOST TREASURE","THE SACRED PATH","THE ANCIENT HOP","FESTIVAL DETECTIVE","THE SURPRISE CHAMBER"].map((x,i)=>`<div class="card" style="margin:10px 0"><b>LEVEL ${i+1} — ${x}</b><span style="float:right">${i<user.level?'✓ Completed':i===user.level-1?'◉ Available':'🔒 Locked'}</span></div>`).join("")}</div>`);
+}
+function profile(){
+ setContent(`<div class="page"><section class="hero"><h1>${user.avatar} ${esc(user.username)}</h1><p>Explorer profile • Museum passport</p></section><div class="grid2" style="margin-top:20px"><div class="card"><h2>Profile Details</h2><p><b>Full Name:</b> ${esc(user.name)}</p><p><b>Username:</b> ${esc(user.username)}</p><p><b>Email:</b> ${esc(user.email||"Not added")}</p><p><b>Contact:</b> ${esc(user.phone||"Not added")}</p><button class="btn gold" onclick="editProfile()">EDIT PROFILE</button></div><div class="card"><h2>Adventure Statistics</h2><p>⭐ <b>${user.xp}</b> XP</p><p>🪙 <b>${user.coins}</b> Coins</p><p>🏛️ <b>${Math.min(user.level-1,5)}</b> Levels completed</p><p>🗺️ <b>${user.completedStates.length}</b> States explored</p><p>🏅 <b>${user.badges.length}</b> Badges earned</p></div></div></div>`);
+}
+function editProfile(){document.getElementById("modal").innerHTML=`<div class="modal-box"><h2>Edit Explorer Profile</h2><div class="field"><label>Full Name</label><input id="eName" value="${esc(user.name)}"></div><div class="field" style="margin-top:10px"><label>Email</label><input id="eEmail" value="${esc(user.email)}"></div><div class="field" style="margin-top:10px"><label>Contact Number</label><input id="ePhone" value="${esc(user.phone)}"></div><div style="margin-top:18px"><button class="btn gold" onclick="saveProfile()">SAVE CHANGES</button> <button class="btn light" onclick="closeModal()">Cancel</button></div></div>`;document.getElementById("modal").classList.add("open")}
+function saveProfile(){user.name=document.getElementById("eName").value;user.email=document.getElementById("eEmail").value;user.phone=document.getElementById("ePhone").value;save();closeModal();profile();toast("Profile updated.")}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+function rules(){setContent(`<div class="page"><section class="hero"><h1>📜 RULES & REGULATIONS</h1><p>Every game follows the same principle: learn first, then play.</p></section><div class="grid2" style="margin-top:20px">${[
+["🏛️ HISTORY — THE LOST TREASURE","Select a state. Study the historical information. Solve 3 clues. Earn coins and XP. Complete minimum 2 states to progress."],
+["🌉 CULTURE — THE SACRED PATH","Study cultural information. Answer questions by choosing planks. Correct answer allows progression. Wrong answer breaks the plank. Review and restart. Complete minimum 2 states."],
+["🪷 CIVILIZATION — THE ANCIENT HOP","Navigate the hopscotch-style path. Answer 3 civilization questions. Correct answers allow progression. Wrong answers cause a setback. Earn coins and XP."],
+["🎉 FESTIVALS — FESTIVAL DETECTIVE","Learn about state festivals. Identify festival clues. Approximately 5 questions per state. Earn coins and XP. Complete required states to progress."],
+["✨ SURPRISE — THE SURPRISE CHAMBER","Select a state. Select traditional attire. Upload your photo. Generate an AI heritage experience. Explore different traditions."]
+].map(x=>`<div class="card"><h2>${x[0]}</h2><p>${x[1]}</p></div>`).join("")}</div></div>`)}
+function completion(title,reward){setContent(`<div class="page"><div class="game" style="text-align:center"><div class="game-inner"><div style="font-size:80px">🏆</div><h1>${title}</h1><p>${reward}</p><h2>+ XP • + Coins</h2><button class="btn gold" onclick="journey()">RETURN TO JOURNEY</button></div></div></div>`)}
+function gain(xp,coins){user.xp+=xp;user.coins+=coins;save();renderTopbar()}
+function addBadge(icon,name){if(!user.badges.includes(name)){user.badges.push(name);toast(icon+" "+name+" unlocked!");save()}}
+function setContent(x){document.getElementById("content").innerHTML=x}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove("show"),2600)}
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function escapeAttr(s){return esc(s).replace(/`/g,"&#96;")}
+app();
+</script>
+</body>
+</html>
